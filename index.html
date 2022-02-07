@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Animation - Circle Up-Down Example</title>
+
+    <style>
+        #my-canvas {
+            border: #cacaca 1px solid;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="my-canvas" width="400" , height="300">Your web browser does not support canvas element</canvas>
+
+    <script>
+
+        window.onload = init;
+
+        let circleRadius = 60;
+        let translateY = 0;
+        let speed = 4;
+        let direction = 1;
+
+
+        function init() {
+            let myCanvas = document.getElementById('my-canvas');
+
+            if (myCanvas.getContext) {
+                let ctx = myCanvas.getContext('2d');
+
+                update(ctx);
+
+
+
+            } else {
+                alert('Canvas is not supported')
+            }
+        }
+
+
+        function update(ctx) {
+
+            //brisanje
+            ctx.clearRect(0, 0, 400, 300);
+
+            //cuvanje stanja
+            ctx.save();
+            //azuriranje translacija
+            ctx.translate(0, translateY);
+
+
+            //crtanje
+            ctx.beginPath();
+            ctx.fillStyle = 'blue';
+            ctx.arc(200, 60, circleRadius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            //prethodno stanje
+            ctx.restore();
+
+            //provjeravanje gdje se krug nalazi
+            if (translateY > ctx.canvas.height - (circleRadius * 2)) {
+                direction = -1;
+
+            } else if (translateY < 0) {
+                direction = 1;
+            }
+
+            //
+            translateY += direction * speed;
+
+            requestAnimationFrame(function () {
+                update(ctx);
+            })
+        }
+    </script>
+
+</body>
+
+</html>
